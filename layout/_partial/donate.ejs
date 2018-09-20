@@ -1,9 +1,7 @@
 <div class="donate-container">
-    <div class="donate-button">
-        <button id="donate-button"><%= __('post.donate') %></button>
-    </div>
-    <div class="donate-img-container hide" id="donate-img-container">
-        <img id="donate-img" src="" data-src="<%= config['root'] %><%= config.donate.img %>">
+    <div class="donate-img-container" id="donate-img-container">
+        <p> <%= config.donate.pre %> </p>
+        <img id="donate-img" src="<%= config['root'] %><%= config.donate.img %>" alt="感谢赞助">
         <p> <%= config.donate.content %> </p>
     </div>
 </div>

@@ -819,8 +819,8 @@ body {
   flex-direction: column;
 }
 .donate-container .donate-img-container img {
-  max-width: 400px;
-  max-height: 360px;
+  max-width: 600px;
+  max-height: 400px;
 }
 .donate-container .donate-img-container p {
   text-align: center;

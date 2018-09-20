@@ -8,12 +8,12 @@
 window.onresize = () => {
     // when window resize , we show remove some class that me be added
     // often for debug
-    if(window.document.documentElement.clientWidth > 680){
+    if (window.document.documentElement.clientWidth > 680) {
         let aboutContent = document.getElementById('nav-content')
         aboutContent.classList.remove('hide-block')
         aboutContent.classList.remove('show-block');
     }
-    if(window.isPost){
+    if (window.isPost) {
         reLayout()
     }
 }
@@ -43,7 +43,7 @@ const searchResultContainer = document.getElementById('search-result-container')
 const escSearch = document.getElementById('esc-search')
 const beginSearch = document.getElementById('begin-search')
 
-searchField.addEventListener('mousewheel',(e) => {
+searchField.addEventListener('mousewheel', (e) => {
     // e.preventDefault()
     e.stopPropagation()
     return false
@@ -56,18 +56,18 @@ searchButton.addEventListener('click', () => {
     search()
 });
 
-escSearch.addEventListener('click',() => {
+escSearch.addEventListener('click', () => {
     hideSearchField()
 })
 
-beginSearch.addEventListener('click',() => {
+beginSearch.addEventListener('click', () => {
     let keyword = searchInput.value;
-    if(keyword){
+    if (keyword) {
         searchFromKeyWord(keyword)
     }
 })
 
-function toggleSeachField(){
+function toggleSeachField() {
     if (!searchField.classList.contains('show-flex-fade')) {
         showSearchField()
     } else {
@@ -81,40 +81,40 @@ function showSearchField() {
     searchField.classList.remove('hide-flex-fade');
 }
 
-function hideSearchField(){
+function hideSearchField() {
     window.onkeydown = null;
     searchField.classList.add('hide-flex-fade');
     searchField.classList.remove('show-flex-fade');
 }
 
-function searchFromKeyWord(keyword = ""){
+function searchFromKeyWord(keyword = "") {
     let result = [];
 
     let sildeWindowSize = 100;
 
     let handleKeyword = keyword
 
-    if(!caseSensitive){
+    if (!caseSensitive) {
         handleKeyword = keyword.toLowerCase()
     }
-    if(!searchJson) return -1;
+    if (!searchJson) return -1;
     else {
         searchJson.forEach((item) => {
 
-            if(!item.title || !item.content) return 0; // break
+            if (!item.title || !item.content) return 0; // break
 
             let title = item.title
-            let content = item.content.trim().replace(/<[^>]+>/g,"").replace(/[`#\n]/g,"");
+            let content = item.content.trim().replace(/<[^>]+>/g, "").replace(/[`#\n]/g, "");
 
-            let lowerTitle = title,lowerContent = content;
+            let lowerTitle = title, lowerContent = content;
 
-            if(!caseSensitive){
+            if (!caseSensitive) {
                 lowerTitle = title.toLowerCase();
                 lowerContent = content.toLowerCase();
             }
 
 
-            if(lowerTitle.indexOf(handleKeyword) !== -1 || lowerContent.indexOf(handleKeyword) !== -1){
+            if (lowerTitle.indexOf(handleKeyword) !== -1 || lowerContent.indexOf(handleKeyword) !== -1) {
                 let resultItem = {}
                 resultItem.title = title.replace(keyword, "<span class='red'>" + keyword + '</span>');
                 resultItem.url = item.url;
@@ -123,10 +123,10 @@ function searchFromKeyWord(keyword = ""){
 
                 let lastend = 0
 
-                while(lowerContent.indexOf(handleKeyword) !== -1){
+                while (lowerContent.indexOf(handleKeyword) !== -1) {
                     let begin = lowerContent.indexOf(handleKeyword) - sildeWindowSize / 2 < 0 ? 0 : lowerContent.indexOf(handleKeyword) - sildeWindowSize / 2
                     let end = begin + sildeWindowSize;
-                    let reg = caseSensitive ?  new RegExp('('+keyword+')','g') :  new RegExp('('+keyword+')','ig')
+                    let reg = caseSensitive ? new RegExp('(' + keyword + ')', 'g') : new RegExp('(' + keyword + ')', 'ig')
                     resultItem.content.push("..." + content.slice(lastend + begin, lastend + end).replace(reg, "<span class='red'>$1</span>") + "...")
                     lowerContent = lowerContent.slice(end, lowerContent.length)
                     lastend = end
@@ -137,7 +137,7 @@ function searchFromKeyWord(keyword = ""){
         })
     }
 
-    if(!result.length){
+    if (!result.length) {
         searchResultContainer.innerHTML = `
             <div class="no-search-result">No Result</div>
         `
@@ -146,13 +146,13 @@ function searchFromKeyWord(keyword = ""){
 
     let searchFragment = document.createElement('ul')
 
-    for(let item of result){
+    for (let item of result) {
         let searchItem = document.createElement('li');
         let searchTitle = document.createElement('a');
         searchTitle.href = item.url
         searchTitle.innerHTML = item.title;
         searchItem.appendChild(searchTitle)
-        if(item.content.length) {
+        if (item.content.length) {
             let searchContentLiContainer = document.createElement('ul')
             for (let citem of item.content) {
                 let searchContentFragment = document.createElement('li')
@@ -163,13 +163,13 @@ function searchFromKeyWord(keyword = ""){
         }
         searchFragment.appendChild(searchItem)
     }
-    while(searchResultContainer.firstChild){
+    while (searchResultContainer.firstChild) {
         searchResultContainer.removeChild(searchResultContainer.firstChild)
     }
     searchResultContainer.appendChild(searchFragment)
 }
 
-function search(){
+function search() {
 
     toggleSeachField()
 
@@ -177,17 +177,17 @@ function search(){
         if (e.which === 27) {
             /** 这里编写当ESC按下时的处理逻辑！ */
             toggleSeachField()
-        } else if(e.which === 13){
+        } else if (e.which === 13) {
             // 回车按下
             let keyword = searchInput.value;
-            if(keyword){
+            if (keyword) {
                 searchFromKeyWord(keyword)
             }
         }
     }
 
 
-    if(!searchJson){
+    if (!searchJson) {
         let isXml;
         let search_path = window.hexo_search_path;
         if (search_path.length === 0) {
@@ -195,17 +195,17 @@ function search(){
         } else if (/json$/i.test(search_path)) {
             isXml = false;
         }
-        let path = window.hexo_root+ search_path;
+        let path = window.hexo_root + search_path;
         $.ajax({
             url: path,
             dataType: isXml ? "xml" : "json",
             async: true,
             success: function (res) {
-                searchJson = isXml ? $("entry", res).map(function() {
+                searchJson = isXml ? $("entry", res).map(function () {
                     return {
                         title: $("title", this).text(),
-                        content: $("content",this).text(),
-                        url: $("url" , this).text()
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
                     };
                 }).get() : res;
             }
@@ -225,8 +225,8 @@ function getDistanceOfLeft(obj) {
         obj = obj.offsetParent;
     }
     return {
-        left:left,
-        top:top
+        left: left,
+        top: top
     };
 }
 
@@ -234,12 +234,12 @@ var toc = document.getElementById('toc')
 
 var tocToTop = getDistanceOfLeft(toc).top;
 
-if(window.isPost){
+if (window.isPost) {
     var result = []
 
     var nameSet = new Set();
 
-    if(!toc || !toc.children || !toc.children[0]){
+    if (!toc || !toc.children || !toc.children[0]) {
         // do nothing
     }
     else {
@@ -256,7 +256,7 @@ if(window.isPost){
                 ol.forEach((item) => {
                     if (item.children.length === 1) {
                         // TODO: need change
-                        let value = item.children[0].getAttribute('href').replace(/^#/,"")
+                        let value = item.children[0].getAttribute('href').replace(/^#/, "")
                         result.push({
                             value: [value],
                             dom: item
@@ -265,9 +265,9 @@ if(window.isPost){
                     }
                     else {
                         let concatArray = getArrayFromOl(Array.from(item.children[1].children))
-                        nameSet.add(item.children[0].getAttribute('href').replace(/^#/,""))
+                        nameSet.add(item.children[0].getAttribute('href').replace(/^#/, ""))
                         result.push({
-                            value: [item.children[0].getAttribute('href').replace(/^#/,"")].concat(concatArray.reduce((p, n) => {
+                            value: [item.children[0].getAttribute('href').replace(/^#/, "")].concat(concatArray.reduce((p, n) => {
                                 p = p.concat(n.value)
                                 return p;
                             }, [])),
@@ -286,7 +286,7 @@ if(window.isPost){
 
         function reLayout() {
             let scrollToTop = document.documentElement.scrollTop || window.pageYOffset // Safari is special
-            if(tocToTop === 0) {
+            if (tocToTop === 0) {
                 // Fix bug that when resize window the toc layout may be wrong
                 toc = document.getElementById('toc')
                 toc.classList.remove('toc-fixed')
@@ -335,22 +335,4 @@ if(window.isPost){
     }
 }
 
-
-// donate
-/*****************************************************************************/
-const donateButton = document.getElementById('donate-button')
-const donateImgContainer = document.getElementById('donate-img-container')
-const donateImg = document.getElementById('donate-img')
-
-if(donateButton) {
-    donateButton.addEventListener('click', () => {
-        if (donateImgContainer.classList.contains('hide')) {
-            donateImgContainer.classList.remove('hide')
-        } else {
-            donateImgContainer.classList.add('hide')
-        }
-    })
-
-    donateImg.src = donateImg.dataset.src
-}
 
