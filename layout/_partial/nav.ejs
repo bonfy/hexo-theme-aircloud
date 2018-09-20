@@ -28,10 +28,12 @@
                     <span><%= __('nav.archives') %></span>
                 </a>
             </li>
-            <a href="https://bonfy.im">
-                <i class="iconfont icon-guanyu2"></i>
-                <span>关于</span>
-            </a>
+            <li <% if(is_current('about')){ %> <%- "class=active" %> <% } %>>
+                <a href="https://bonfy.im">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>关于</span>
+                </a>
+            </li>
             <%if(config.search && config.search.path){%>
             <li>
                 <a id="search">
